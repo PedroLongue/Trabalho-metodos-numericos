@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 def rungeKutta3System(equations, t, tMax, constant, deltaT):
     increment = np.arange(t, tMax, deltaT) #incrementa do t inical ate o t final usando o delta t
@@ -56,16 +57,32 @@ def rungeKutta3System(equations, t, tMax, constant, deltaT):
     # print('k3Cb: ', k3Cb)
     # print('k3Cc: ', k3Cc)
 
-    return c_a, c_b, c_c
+    return c_a, c_b, c_c, increment
  
+def renderGraph(equations, t, tMax, constant, deltaT):
+    # print("aaa", len(resultRk[3]))
+    resultRk = rungeKutta3System(equations,t,tMax,constant,deltaT)
+    plt.plot(resultRk[3],resultRk[0],color='purple', label='ca')
+    plt.plot(resultRk[3],resultRk[1],color='black', label='cb')
+    plt.plot(resultRk[3],resultRk[2],color='blue', label='cc')
+    plt.legend(title="C",loc=0)
+    plt.xlabel("t(s)")
+    plt.ylabel("C")
+    plt.show()
+    print("a=", resultRk[0][len(resultRk[0])-1])
+    print("b=", resultRk[1][len(resultRk[1])-1])
+    print("c=", resultRk[2][len(resultRk[2])-1])
+
 ca, cb, cc = 1, 0, 1
 t0 = 0
 tMax = 1.5
 deltaT = 0.5
 alfa, beta, gama = 1, 1, 1
 
-rungeKutta3System([ca, cb, cc],t0,tMax,[alfa, beta, gama],deltaT)
+# rungeKutta3System([ca, cb, cc],t0,tMax,[alfa, beta, gama],deltaT)
 
-print("Ca: ", rungeKutta3System([ca, cb, cc],t0,tMax,[alfa, beta, gama],deltaT)[0])
-print("Cb: ", rungeKutta3System([ca, cb, cc],t0,tMax,[alfa, beta, gama],deltaT)[1])
-print("Cc: ", rungeKutta3System([ca, cb, cc],t0,tMax,[alfa, beta, gama],deltaT)[2])
+# print("Ca: ", rungeKutta3System([ca, cb, cc],t0,tMax,[alfa, beta, gama],deltaT)[0])
+# print("Cb: ", rungeKutta3System([ca, cb, cc],t0,tMax,[alfa, beta, gama],deltaT)[1])
+# print("Cc: ", rungeKutta3System([ca, cb, cc],t0,tMax,[alfa, beta, gama],deltaT)[2])
+
+renderGraph([ca, cb, cc],t0,tMax,[alfa, beta, gama],deltaT)
