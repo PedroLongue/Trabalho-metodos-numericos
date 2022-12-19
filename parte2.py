@@ -52,7 +52,7 @@ def createMatrix(constants, Node):
         print('concentação '+str(i+1)+" = ",x[i])
     print("\n")
 
-    return internalNodeCalculation, x
+    return internalNodeCalculation, concentration, x 
 
 def matrixCalculation(a, b, initialSolution):
     n = len(a)                   
@@ -70,7 +70,7 @@ def matrixCalculation(a, b, initialSolution):
 def renderGraph(constants, Node):
     hex = '#%06X' % round(random() * 0xffffff)
     concentration=createMatrix(constants, Node)
-    plot.plot(concentration[1], concentration[0], color=hex)
+    plot.plot(concentration[2], concentration[0], color=hex)
     plot.xlabel("delta X")
     plot.ylabel("concentração")
     plot.show()
@@ -79,11 +79,27 @@ def Refinamento(Node, constants, i):
     for k in range(i[0], i[1]+1):
         hex = '#%06X' % round(random() * 0xffffff)
         system = createMatrix([constants[0], constants[1], constants[2]], [Node[0], k, Node[1]])
-        plot.plot(system[1], color = hex, label = 'Nos Iternos=' + str(k))
+        plot.plot(system[2], color = hex, label = 'Nos Iternos=' + str(k))
         plot.legend(title='Numero de Nos Internos')
         plot.xlabel("Delta X")
         plot.ylabel("Concentração")
 
+    plot.show()
+
+def Sensibilidade(Node, constants, passoK, passoD):
+    d = [D-2*passoD, D-passoD, D, D+passoD, D+2*passoD]
+    k = [K-2*passoK, K-passoK, K, K+passoK, K+2*passoK]
+    for i in range(0, len(d)):
+        hex = '#%06X' % round(random() * 0xffffff)
+        SolverK = createMatrix([constants[0], k[i], constants[2]], [Node[0], Node[1], Node[2]])
+        plot.plot(SolverK[0], SolverK[2], color=hex, label="K="+str(k[i]))
+        plot.legend(title="K", loc=0)
+    plot.show()
+    for i in range(0, len(k)-1):
+        hex = '#%06X' % round(random() * 0xffffff)
+        SolverD = createMatrix([constants[0], constants[1], d[i]], [Node[0], Node[1], Node[2]])
+        plot.plot(SolverD[0], SolverD[2], color=hex, label="D="+str(d[i]))
+        plot.legend(title="D", loc=0)
     plot.show()
 
 firstNode = 0.1
@@ -103,3 +119,4 @@ deltaD = 0.5*convention
 
 renderGraph([L, K, D], [firstNode, internalNode, lastNode])
 Refinamento([firstNode, lastNode], [L, K, D], [Ii, If])
+Sensibilidade([firstNode, internalNode, lastNode], [L, K, D], deltaK, deltaD)

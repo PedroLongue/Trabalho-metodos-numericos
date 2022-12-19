@@ -41,22 +41,21 @@ def rungeKuttaSystem(equations, t, tMax, constant, deltaT):
         c_b.append(c_b[j] + (1/6)*(k1Cb+4*k2Cb+k3Cb)*deltaT)
         c_c.append(c_c[j] + (1/6)*(k1Cc+4*k2Cc+k3Cc)*deltaT)
 
-    # print('k1Ca: ', k1Ca)
-    # print('k1Cb: ', k1Cb)
-    # print('k1Cc: ', k1Cc)
-    # print('\n')
-    # print('k2Ca: ', k2Ca)
-    # print('k2Cb: ', k2Cb)
-    # print('k2Cc: ', k2Cc)
-    # print('\n')
-    # print('k3Ca: ', k3Ca)
-    # print('k3Cb: ', k3Cb)
-    # print('k3Cc: ', k3Cc)
+    print('k1Ca: ', k1Ca)
+    print('k1Cb: ', k1Cb)
+    print('k1Cc: ', k1Cc)
+    print('\n')
+    print('k2Ca: ', k2Ca)
+    print('k2Cb: ', k2Cb)
+    print('k2Cc: ', k2Cc)
+    print('\n')
+    print('k3Ca: ', k3Ca)
+    print('k3Cb: ', k3Cb)
+    print('k3Cc: ', k3Cc)
 
     return c_a, c_b, c_c, increment
  
 def renderGraph(equations, t, tMax, constant, deltaT):
-    # print("aaa", len(resultRk[3]))
     hex = '#%06X' % round(random() * 0xffffff)
     hex1 = '#%06X' % round(random() * 0xffffff)
     hex2 = '#%06X' % round(random() * 0xffffff)
@@ -131,12 +130,12 @@ alfa, beta, gamma = 1, 1, 1
 deltaT0 = 0.1
 deltaT1 = 0.5
 
-# rungeKuttaSystem([ca, cb, cc],t0,tMax,[alfa, beta, gamma],deltaT)
+rungeKuttaSystem([ca, cb, cc],t0,tMax,[alfa, beta, gamma],deltaT)
 
 # print("Ca: ", rungeKuttaSystem([ca, cb, cc],t0,tMax,[alfa, beta, gamma],deltaT)[0])
 # print("Cb: ", rungeKuttaSystem([ca, cb, cc],t0,tMax,[alfa, beta, gamma],deltaT)[1])
 # print("Cc: ", rungeKuttaSystem([ca, cb, cc],t0,tMax,[alfa, beta, gamma],deltaT)[2])
 
-renderGraph([ca, cb, cc],t0,tMax,[alfa, beta, gamma],deltaT)
-refinamento([ca,cb,cc],t0, tMax, [alfa,beta, gamma],deltaT0, deltaT1,deltaT)
-sensibilidade([ca,cb,cc], t0, tMax, [alfa,beta, gamma], deltaT)
+# renderGraph([ca, cb, cc],t0,tMax,[alfa, beta, gamma],deltaT)
+# refinamento([ca,cb,cc],t0, tMax, [alfa,beta, gamma],deltaT0, deltaT1,deltaT)
+# sensibilidade([ca,cb,cc], t0, tMax, [alfa,beta, gamma], deltaT)
