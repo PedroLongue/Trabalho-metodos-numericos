@@ -75,13 +75,12 @@ def renderGraph(constants, Node):
     plot.ylabel("concentração")
     plot.show()
 
-def Refinamento(Node, constants, iInicial, iFinal):
-    for i in range(iInicial, iFinal+1):
+def Refinamento(Node, constants, i):
+    for k in range(i[0], i[1]+1):
         hex = '#%06X' % round(random() * 0xffffff)
-        # Color = next(cycol)
-        Sistema1 = createMatrix([constants[0], constants[1], constants[2]], [Node[0], i, Node[1]])
-        plot.plot(Sistema1[0], color = hex, label = 'Nos Iternos='+str(i))
-        plot.legend(title='Numero de Nos Internos', loc=0)
+        system = createMatrix([constants[0], constants[1], constants[2]], [Node[0], k, Node[1]])
+        plot.plot(system[1], color = hex, label = 'Nos Iternos=' + str(k))
+        plot.legend(title='Numero de Nos Internos')
         plot.xlabel("Delta X")
         plot.ylabel("Concentração")
 
@@ -103,4 +102,4 @@ deltaK = 1*convention
 deltaD = 0.5*convention 
 
 renderGraph([L, K, D], [firstNode, internalNode, lastNode])
-Refinamento([firstNode, lastNode], [L, K, D], Ii, If)
+Refinamento([firstNode, lastNode], [L, K, D], [Ii, If])
