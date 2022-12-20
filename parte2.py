@@ -4,12 +4,11 @@ from random import random
 
 def createMatrix(constants, Node):
     DeltaX = constants[0]/(Node[1]+1)
-    s = DeltaX**2 * K/D
-    aux = np.arange(DeltaX,L-DeltaX,DeltaX)
-    internalNodeCalculation = [0 for i in range(len(aux)+3)]
+    aux = np.arange(DeltaX,L,DeltaX)
+    internalNodeCalculation = [0 for i in range(len(aux)+2)]
 
     internalNodeCalculation[0]=0
-    internalNodeCalculation[(len(internalNodeCalculation)-1)]=internalNodeCalculation[len(internalNodeCalculation)-5]+DeltaX
+    internalNodeCalculation[len(aux)+1]=constants[0]
     for i in range(0,len(aux)):
         internalNodeCalculation[i+1]=(aux[i])
 
@@ -17,17 +16,17 @@ def createMatrix(constants, Node):
     for i in range(Node[1]):
         for j in range(Node[1]):
             if(i==j and j==0):
-                A[i][j] = 2+s
+                A[i][j] = 2+ (DeltaX**2 * K/D)
                 A[i][j+1]= -1
                 continue
 
             elif(i==j and j==(Node[1]-1)):
-                A[i][j] = 2+s
+                A[i][j] = 2+(DeltaX**2 * K/D)
                 A[i][j-1]= -1
                 continue
 
             elif(i==j):
-                A[i][j] = 2+s
+                A[i][j] = 2+ (DeltaX**2 * K/D)
                 A[i][j+1]= -1
                 A[i][j-1]= -1
         
@@ -47,10 +46,6 @@ def createMatrix(constants, Node):
     x[Node[1]+1]=Node[2]
     for i in range(0,Node[1]):
         x[i+1]=(concentration[i])
-       
-    for i in range(len(x)):
-        print('concentação '+str(i+1)+" = ",x[i])
-    print("\n")
 
     return internalNodeCalculation, aux, concentration, x 
 
@@ -70,7 +65,7 @@ def matrixCalculation(a, b, initialSolution):
 def renderGraph(constants, Node):
     hex = '#%06X' % round(random() * 0xffffff)
     concentration=createMatrix(constants, Node)
-    plot.plot(concentration[3], concentration[0], color=hex)
+    plot.plot(concentration[3], concentration[0], "o", color=hex)
     plot.xlabel("delta X")
     plot.ylabel("concentração")
     plot.show()
@@ -92,30 +87,31 @@ def Sensibilidade(Node, constants, passoK, passoD):
     for i in range(0, len(d)):
         hex = '#%06X' % round(random() * 0xffffff)
         SolverK = createMatrix([constants[0], k[i], constants[2]], [Node[0], Node[1], Node[2]])
-        plot.plot(SolverK[1], SolverK[3], color=hex, label="K="+str(k[i]))
+        plot.plot(SolverK[0], SolverK[3], "o", color=hex, label="K="+str(k[i]))
         plot.legend(title="K")
     plot.show()
-    for i in range(0, len(k)-1):
+    
+    for i in range(0, len(k)):
         hex = '#%06X' % round(random() * 0xffffff)
         SolverD = createMatrix([constants[0], constants[1], d[i]], [Node[0], Node[1], Node[2]])
-        plot.plot(SolverD[1], SolverD[3], color=hex, label="D="+str(d[i]))
+        plot.plot(SolverD[0], SolverD[3],"o", color=hex, label="D="+str(d[i]))
         plot.legend(title="D")
     plot.show()
 
 firstNode = 0.1
 lastNode = 0
-internalNode = 20
+internalNode = 40
 
 convention = 10**(-6)
 
-L= 4
-K = 8*convention
-D = 2*convention
+L= 6
+K = 2*convention
+D = 4*convention
 
-Ii = 3
-If = 6
-deltaK = 1*convention
-deltaD = 0.5*convention 
+Ii = 4
+If = 8
+deltaK = 0.5*convention
+deltaD = 1*convention 
 
 renderGraph([L, K, D], [firstNode, internalNode, lastNode])
 Refinamento([firstNode, lastNode], [L, K, D], [Ii, If])
