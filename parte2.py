@@ -2,6 +2,21 @@ import numpy as np
 import matplotlib.pyplot as plot
 from random import random
 
+#Calcula matrix por Gauss Seidel
+def matrixCalculation(A, B, initialSolution):
+    Alength = len(A)                   
+    
+    for k in range(0, Alength):        
+        aux = B[k]                  
+          
+        for i in range(0, Alength):     
+            if(k != i):
+                aux = aux - (A[k][i] * initialSolution[i])      
+        initialSolution[k] = aux / A[k][k]      
+
+    return initialSolution   
+
+#Construção da Matriz
 def createMatrix(constants, Node):
     DeltaX = constants[0]/(Node[1]+1)
     aux = np.arange(DeltaX,L,DeltaX)
@@ -49,19 +64,7 @@ def createMatrix(constants, Node):
 
     return internalNodeCalculation, aux, concentration, x 
 
-def matrixCalculation(a, b, initialSolution):
-    n = len(a)                   
-    
-    for j in range(0, n):        
-        aux = b[j]                  
-          
-        for i in range(0, n):     
-            if(j != i):
-                aux = aux - (a[j][i] * initialSolution[i])      
-        initialSolution[j] = aux / a[j][j]      
-
-    return initialSolution   
-
+#Gráfico delta X x concentração
 def renderGraph(constants, Node):
     hex = '#%06X' % round(random() * 0xffffff)
     concentration=createMatrix(constants, Node)
@@ -70,49 +73,54 @@ def renderGraph(constants, Node):
     plot.ylabel("concentração")
     plot.show()
 
-def Refinamento(Node, constants, i):
+#Gráfico do refinamento
+def refinement(Node, constants, i):
     for k in range(i[0], i[1]+1):
         hex = '#%06X' % round(random() * 0xffffff)
         system = createMatrix([constants[0], constants[1], constants[2]], [Node[0], k, Node[1]])
-        plot.plot(system[3], color = hex, label = 'Nos Iternos=' + str(k))
-        plot.legend(title='Numero de Nos Internos')
-        plot.xlabel("Delta X")
+        plot.plot(system[3], color = hex, label = 'Nos interiores: ' + str(k))
+        plot.xlabel("delta X")
         plot.ylabel("Concentração")
-
+        plot.legend(title="Refinamento")
     plot.show()
 
-def Sensibilidade(Node, constants, passoK, passoD):
-    d = [D-2*passoD, D-passoD, D, D+passoD, D+2*passoD]
-    k = [K-2*passoK, K-passoK, K, K+passoK, K+2*passoK]
+#Gráfico da sensibilidade
+def sensitivity(Node, constants, steps):
+    k = [K-2*steps[0], K-steps[0], K, K+steps[0], K+2*steps[0]]
+    d = [D-2*steps[1], D-steps[1], D, D+steps[1], D+2*steps[1]]
     for i in range(0, len(d)):
         hex = '#%06X' % round(random() * 0xffffff)
-        SolverK = createMatrix([constants[0], k[i], constants[2]], [Node[0], Node[1], Node[2]])
-        plot.plot(SolverK[0], SolverK[3], "o", color=hex, label="K="+str(k[i]))
-        plot.legend(title="K")
+        decryptionK = createMatrix([constants[0], k[i], constants[2]], [Node[0], Node[1], Node[2]])
+        plot.plot(decryptionK[0], decryptionK[3], "o", color=hex, label="K: "+str(k[i]))
+        plot.legend(title="Sensibilidade K")
     plot.show()
     
     for i in range(0, len(k)):
         hex = '#%06X' % round(random() * 0xffffff)
-        SolverD = createMatrix([constants[0], constants[1], d[i]], [Node[0], Node[1], Node[2]])
-        plot.plot(SolverD[0], SolverD[3],"o", color=hex, label="D="+str(d[i]))
-        plot.legend(title="D")
+        decryptionD = createMatrix([constants[0], constants[1], d[i]], [Node[0], Node[1], Node[2]])
+        plot.plot(decryptionD[0], decryptionD[3],"o", color=hex, label="D: "+str(d[i]))
+        plot.legend(title="Sensivilidade D")
     plot.show()
 
+#Node
 firstNode = 0.1
 lastNode = 0
 internalNode = 40
 
+#convenção adotada
 convention = 10**(-6)
 
-L= 6
+#constants
+L= 8
 K = 2*convention
 D = 4*convention
 
-Ii = 4
+Ii = 2
 If = 8
-deltaK = 0.5*convention
-deltaD = 1*convention 
+stepK = 0.5*convention
+stepK = 1*convention 
 
 renderGraph([L, K, D], [firstNode, internalNode, lastNode])
-Refinamento([firstNode, lastNode], [L, K, D], [Ii, If])
-Sensibilidade([firstNode, internalNode, lastNode], [L, K, D], deltaK, deltaD)
+refinement([firstNode, lastNode], [L, K, D], [Ii, If])
+sensitivity([firstNode, internalNode, lastNode], [L, K, D], [stepK, stepK])
+

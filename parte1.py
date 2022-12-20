@@ -3,6 +3,7 @@ import matplotlib.pyplot as plot
 
 from random import random
 
+#Realiza o calculo de RK3 com sistemas
 def rungeKuttaSystem(equations, t, tMax, constant, deltaT):
     increment = np.arange(t, tMax, deltaT) #incrementa do t inical ate o t final usando o delta t
 
@@ -14,12 +15,15 @@ def rungeKuttaSystem(equations, t, tMax, constant, deltaT):
     c_b[0]= equations[1]
     c_c[0]= equations[2]
 
+    #Função de CA
     def derivateC_A(t,c_a,c_b,c_c):
         return ((-constant[0]*c_a*c_c)+c_b)
 
+    #Função de CB
     def derivateC_B(t,c_a,c_b,c_c):
         return ((constant[1]*c_a*c_c)-c_b)
 
+    #Função de CC
     def derivateC_C(t,c_a,c_b,c_c):
         return ((-constant[2]*c_a*c_c+c_b)-2*c_c)
 
@@ -41,20 +45,21 @@ def rungeKuttaSystem(equations, t, tMax, constant, deltaT):
         c_b.append(c_b[j] + (1/6)*(k1Cb+4*k2Cb+k3Cb)*deltaT)
         c_c.append(c_c[j] + (1/6)*(k1Cc+4*k2Cc+k3Cc)*deltaT)
 
-    print('k1Ca: ', k1Ca)
-    print('k1Cb: ', k1Cb)
-    print('k1Cc: ', k1Cc)
-    print('\n')
-    print('k2Ca: ', k2Ca)
-    print('k2Cb: ', k2Cb)
-    print('k2Cc: ', k2Cc)
-    print('\n')
-    print('k3Ca: ', k3Ca)
-    print('k3Cb: ', k3Cb)
-    print('k3Cc: ', k3Cc)
+    # print('k1Ca: ', k1Ca)
+    # print('k1Cb: ', k1Cb)
+    # print('k1Cc: ', k1Cc)
+    # print('\n')
+    # print('k2Ca: ', k2Ca)
+    # print('k2Cb: ', k2Cb)
+    # print('k2Cc: ', k2Cc)
+    # print('\n')
+    # print('k3Ca: ', k3Ca)
+    # print('k3Cb: ', k3Cb)
+    # print('k3Cc: ', k3Cc)
 
     return c_a, c_b, c_c, increment
  
+#Gráfico tempo x C
 def renderGraph(equations, t, tMax, constant, deltaT):
     hex = '#%06X' % round(random() * 0xffffff)
     hex1 = '#%06X' % round(random() * 0xffffff)
@@ -73,6 +78,7 @@ def renderGraph(equations, t, tMax, constant, deltaT):
     print("O aproximado de Cb=", resultRk[1][len(resultRk[1])-1])
     print("O aproximado de Cc=", resultRk[2][len(resultRk[2])-1])
 
+#Gráfico refinamento
 def refinamento(equations, t, tMax, constant, deltaT0, deltaT1, deltaT):
     DeltaT = np.arange(deltaT0, deltaT1, 0.1)
     x, (ca, cb, cc)= plot.subplots(1,3)
@@ -94,6 +100,7 @@ def refinamento(equations, t, tMax, constant, deltaT0, deltaT1, deltaT):
         cc.set_ylabel("cc") 
     plot.show()  
 
+#Gráfico sensibilidade
 def sensibilidade(equations, t, tMax, constant, deltaT):
     sensitivityAlpha = [constant[0]-0.1*constant[0],constant[0]-0.05*constant[0], constant[0], constant[0]+0.05*constant[0], constant[0]+0.10*constant[0]]
     sensitivityBeta = [constant[1]-0.1*constant[1],constant[1]-0.05*constant[1], constant[1], constant[1]+0.05*constant[1], constant[1]+0.10*constant[1]]
@@ -120,15 +127,15 @@ def sensibilidade(equations, t, tMax, constant, deltaT):
         gammaGraph.set_ylabel("cc") 
     plot.show()
 
-ca, cb, cc = 1, 0, 1
+ca, cb, cc = 10, 0, 15
 t0 = 0
-tMax = 1.5
-deltaT = 0.5
-alfa, beta, gamma = 1, 1, 1
+tMax = 3
+deltaT = 1.1
+alfa, beta, gamma = 10, 15, 17
 
 #--------------REFINAMENTO--------------#
-deltaT0 = 0.1
-deltaT1 = 0.5
+deltaT0 = 0.0001
+deltaT1 = 0.0002
 
 rungeKuttaSystem([ca, cb, cc],t0,tMax,[alfa, beta, gamma],deltaT)
 
@@ -136,6 +143,7 @@ rungeKuttaSystem([ca, cb, cc],t0,tMax,[alfa, beta, gamma],deltaT)
 # print("Cb: ", rungeKuttaSystem([ca, cb, cc],t0,tMax,[alfa, beta, gamma],deltaT)[1])
 # print("Cc: ", rungeKuttaSystem([ca, cb, cc],t0,tMax,[alfa, beta, gamma],deltaT)[2])
 
-# renderGraph([ca, cb, cc],t0,tMax,[alfa, beta, gamma],deltaT)
-# refinamento([ca,cb,cc],t0, tMax, [alfa,beta, gamma],deltaT0, deltaT1,deltaT)
-# sensibilidade([ca,cb,cc], t0, tMax, [alfa,beta, gamma], deltaT)
+renderGraph([ca, cb, cc],t0,tMax,[alfa, beta, gamma],deltaT)
+refinamento([ca,cb,cc],t0, tMax, [alfa,beta, gamma],deltaT0, deltaT1,deltaT)
+sensibilidade([ca,cb,cc], t0, tMax, [alfa,beta, gamma], deltaT)
+
