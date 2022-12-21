@@ -68,9 +68,28 @@ def createMatrix(constants, Node):
 def renderGraph(constants, Node):
     hex = '#%06X' % round(random() * 0xffffff)
     concentration=createMatrix(constants, Node)
-    plot.plot(concentration[3], concentration[0], "o", color=hex)
+    plot.plot(concentration[3], concentration[0], color=hex)
     plot.xlabel("delta X")
     plot.ylabel("concentração")
+    plot.show()
+
+#Gráfico da sensibilidade
+def sensitivity(Node, constants, steps):
+    sensitivityD = [constants[2]-2*steps[1], constants[2]-steps[1], constants[2], constants[2]+steps[1], constants[2]+2*steps[1]]
+    sensitivityK = [constants[1]-2*steps[0], constants[1]-steps[0], constants[1], constants[1]+steps[0], constants[1]+2*steps[0]]
+
+    for i in range(0, len(sensitivityK)):
+        hex = '#%06X' % round(random() * 0xffffff)
+        descriptionD = createMatrix([constants[0], constants[1], sensitivityD[i]], [Node[0], Node[1], Node[2]])
+        plot.plot(descriptionD[0], descriptionD[3], color=hex, label="sensibilidade D: "+str(sensitivityD[i]))
+        plot.legend(title="D")
+    plot.show()
+
+    for i in range(0, len(sensitivityD)):
+        hex = '#%06X' % round(random() * 0xffffff)
+        descriptionK = createMatrix([constants[0], sensitivityK[i], constants[2]], [Node[0], Node[1], Node[2]])
+        plot.plot(descriptionK[0], descriptionK[3], color=hex, label="sensibilidade K: "+str(sensitivityK[i]))
+        plot.legend(title="K")
     plot.show()
 
 #Gráfico do refinamento
@@ -84,43 +103,25 @@ def refinement(Node, constants, i):
         plot.legend(title="Refinamento")
     plot.show()
 
-#Gráfico da sensibilidade
-def sensitivity(Node, constants, steps):
-    k = [K-2*steps[0], K-steps[0], K, K+steps[0], K+2*steps[0]]
-    d = [D-2*steps[1], D-steps[1], D, D+steps[1], D+2*steps[1]]
-    for i in range(0, len(d)):
-        hex = '#%06X' % round(random() * 0xffffff)
-        decryptionK = createMatrix([constants[0], k[i], constants[2]], [Node[0], Node[1], Node[2]])
-        plot.plot(decryptionK[0], decryptionK[3], "o", color=hex, label="K: "+str(k[i]))
-        plot.legend(title="Sensibilidade K")
-    plot.show()
-    
-    for i in range(0, len(k)):
-        hex = '#%06X' % round(random() * 0xffffff)
-        decryptionD = createMatrix([constants[0], constants[1], d[i]], [Node[0], Node[1], Node[2]])
-        plot.plot(decryptionD[0], decryptionD[3],"o", color=hex, label="D: "+str(d[i]))
-        plot.legend(title="Sensivilidade D")
-    plot.show()
-
 #Node
-firstNode = 0.1
+firstNode = 0.5
 lastNode = 0
-internalNode = 40
+internalNode = 80
 
 #convenção adotada
 convention = 10**(-6)
 
 #constants
-L= 8
-K = 2*convention
-D = 4*convention
+L= 20
+K = 4*convention
+D = 8*convention
 
 Ii = 2
-If = 8
-stepK = 0.5*convention
-stepK = 1*convention 
+If = 6
+deltaK = 0.5*convention
+deltaD = 2*convention 
 
 renderGraph([L, K, D], [firstNode, internalNode, lastNode])
 refinement([firstNode, lastNode], [L, K, D], [Ii, If])
-sensitivity([firstNode, internalNode, lastNode], [L, K, D], [stepK, stepK])
+sensitivity([firstNode, internalNode, lastNode], [L, K, D], [deltaK, deltaD])
 
