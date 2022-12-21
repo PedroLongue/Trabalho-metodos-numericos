@@ -46,17 +46,17 @@ def rungeKuttaSystem(equations, t, tMax, constant, deltaT):
         c_c.append(c_c[j] + (1/6)*(k1Cc+4*k2Cc+k3Cc)*deltaT)
 
     #printa os valos dos Ks
-    print('k1Ca: ', k1Ca)
-    print('k1Cb: ', k1Cb)
-    print('k1Cc: ', k1Cc)
-    print('\n')
-    print('k2Ca: ', k2Ca)
-    print('k2Cb: ', k2Cb)
-    print('k2Cc: ', k2Cc)
-    print('\n')
-    print('k3Ca: ', k3Ca)
-    print('k3Cb: ', k3Cb)
-    print('k3Cc: ', k3Cc)
+    # print('k1Ca: ', k1Ca)
+    # print('k1Cb: ', k1Cb)
+    # print('k1Cc: ', k1Cc)
+    # print('\n')
+    # print('k2Ca: ', k2Ca)
+    # print('k2Cb: ', k2Cb)
+    # print('k2Cc: ', k2Cc)
+    # print('\n')
+    # print('k3Ca: ', k3Ca)
+    # print('k3Cb: ', k3Cb)
+    # print('k3Cc: ', k3Cc)
 
     return c_a, c_b, c_c, increment
  
@@ -95,15 +95,15 @@ def sensitivity(equations, t, tMax, constant, deltaT):
         alphaGraph.plot(rungeKuttaAlpha[3],rungeKuttaAlpha[0],color=hex, label='%.2f'%(float(sensitivityAlpha[i])))
         alphaGraph.legend(title="alfa")
         alphaGraph.set_xlabel("t(s)")
-        alphaGraph.set_ylabel("ca")
+        alphaGraph.set_ylabel("alfa")
         betaGraph.plot(rungeKuttaBeta[3],rungeKuttaBeta[1],color=hex, label='%.2f'%(float(sensitivityBeta[i])))
         betaGraph.legend(title="beta")
         betaGraph.set_xlabel("t(s)")
-        betaGraph.set_ylabel("cb")
+        betaGraph.set_ylabel("beta")
         gammaGraph.plot(rungeKuttaGamma[3],rungeKuttaGamma[2],color=hex, label='%.2f'%(float(sensitivityGamma[i])))
         gammaGraph.legend(title="gamma")
         gammaGraph.set_xlabel("t(s)")
-        gammaGraph.set_ylabel("cc") 
+        gammaGraph.set_ylabel("gama") 
     plot.show()
 
 #Gráfico refinamento
@@ -124,15 +124,15 @@ def refinement(equations, t, tMax, constant, deltaT0, deltaT1, deltaT):
         cc.set_ylabel("cc") 
     plot.show()  
 
-ca, cb, cc = 10, 0, 15
+ca, cb, cc = 15, 0, 20
 t0 = 0
-tMax = 3
-deltaT = 1.1
+tMax = 1.5
+deltaT = 0.0001
 alfa, beta, gamma = 10, 15, 17
 
 #--------------refinement--------------#
-deltaT0 = 0.00005
-deltaT1 = 0.0004
+deltaT0 = 0.000005
+deltaT1 = 0.00001
 
 rungeKuttaSystem([ca, cb, cc],t0,tMax,[alfa, beta, gamma],deltaT)
 
