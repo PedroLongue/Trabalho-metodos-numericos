@@ -104,7 +104,7 @@ def refinement(Node, constants, i):
     plot.show()
 
 #Node
-firstNode = 0.5
+firstNode = 0.1
 lastNode = 0
 internalNode = 80
 
@@ -112,9 +112,9 @@ internalNode = 80
 convention = 10**(-6)
 
 #constants
-L= 20
-K = 4*convention
-D = 8*convention
+L= 8
+D = 4*convention #alfa
+K = 8*convention #beta
 
 Ii = 2
 If = 6
